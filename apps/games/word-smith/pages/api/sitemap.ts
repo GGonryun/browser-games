@@ -1,10 +1,10 @@
+import { SERVER_SETTINGS } from '@worksheets/data-access/server-settings';
 import { NextApiHandler } from 'next';
-import { WORD_SMITH_URL } from '@worksheets/ui/env';
 
 const LAST_UPDATE_DATE = `2023-12-10`;
 
 const addHomePage = () =>
-  `<url><loc>${WORD_SMITH_URL}</loc><lastmod>${LAST_UPDATE_DATE}</lastmod><priority>1.0</priority></url>`;
+  `<url><loc>${SERVER_SETTINGS.WEBSITES.WORD_SMITH_URL()}</loc><lastmod>${LAST_UPDATE_DATE}</lastmod><priority>1.0</priority></url>`;
 
 const handler: NextApiHandler = (req, res) => {
   res.statusCode = 200;

@@ -12,8 +12,3 @@ export * from './useComponentSize';
 export * from './useDeviceDetect';
 export * from './useTimer';
 export * from './useDeviceSize';
-export * from './useDebounce';
-export * from './useEventCallback';
-export * from './useDeviceOrientation';
-export * from './useLocalStorageAlt';
-export * from './useFileName';

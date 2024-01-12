@@ -1,2 +1,2 @@
-export // leave empty
- {};
+// leave empty
+export {};

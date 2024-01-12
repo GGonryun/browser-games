@@ -1,14 +1,4 @@
 import cloneDeep from 'lodash/cloneDeep';
-// reverses and clones the contents of the array
-export function reverseArray<T>(arr?: T[]): T[] {
-  if (!arr) return [];
-  const reversedArray: T[] = [];
-  for (let i = arr.length - 1; i >= 0; i--) {
-    const item = arr[i];
-    reversedArray.push(item);
-  }
-  return reversedArray;
-}
 
 export function uniqueArray<T>(arr: T[]): T[] {
   return [...new Set(arr)];
@@ -43,17 +33,6 @@ export function splitArray<T>(arr: T[], splits: number): T[][] {
 
   const chunkSize = Math.ceil(arr.length / splits);
   return chunkArray(arr, chunkSize);
-}
-
-export function trimDivisibly<T>(arr: T[], divisor: number): T[] {
-  const remainder = arr.length % divisor;
-  if (remainder === 0) return arr;
-  return arr.slice(0, arr.length - remainder);
-}
-
-export function splitArrayEqually<T>(arr: T[], splits: number): T[][] {
-  const trimmedArray = trimDivisibly(arr, splits);
-  return splitArray(trimmedArray, splits);
 }
 
 export const replaceItem = <T>(arr: T[], index: number, value: T) => {
@@ -106,11 +85,3 @@ export const lastElement = <T>(arr: T[]): T | undefined => {
 export const lastIndex = <T>(arr: T[]): number => {
   return arr.length - 1;
 };
-
-export function checkboxGroup<T>(array: T[], value: T, checked: boolean): T[] {
-  if (checked) {
-    return uniqueArray([...array, value]);
-  } else {
-    return array.filter((v) => v !== value);
-  }
-}

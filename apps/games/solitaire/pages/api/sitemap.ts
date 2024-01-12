@@ -1,10 +1,10 @@
 import { NextApiHandler } from 'next';
-import { SOLITAIRE_URL } from '@worksheets/ui/env';
+import { SERVER_SETTINGS } from '@worksheets/data-access/server-settings';
 
 const LAST_UPDATE_DATE = `2023-12-10`;
 
 const addHomePage = () =>
-  `<url><loc>${SOLITAIRE_URL}</loc><lastmod>${LAST_UPDATE_DATE}</lastmod><priority>1.0</priority></url>`;
+  `<url><loc>${SERVER_SETTINGS.WEBSITES.SOLITAIRE_URL()}</loc><lastmod>${LAST_UPDATE_DATE}</lastmod><priority>1.0</priority></url>`;
 
 const handler: NextApiHandler = (req, res) => {
   res.statusCode = 200;

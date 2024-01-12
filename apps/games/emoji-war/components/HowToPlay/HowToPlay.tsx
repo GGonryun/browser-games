@@ -7,7 +7,6 @@ import {
   Box,
   Button,
   Divider,
-  Link,
   Typography,
   styled,
 } from '@mui/material';
@@ -91,7 +90,7 @@ export const InstructionsAccordion = () => {
     <>
       {Instructions.map((instruction, index) => (
         <div key={index}>
-          <ThemedAccordtion
+          <ThemedAccordion
             expanded={expanded === index}
             onChange={handleChange(index)}
           >
@@ -113,7 +112,7 @@ export const InstructionsAccordion = () => {
                 <Markdown text={instruction.content} />
               </Typography>
             </AccordionDetails>
-          </ThemedAccordtion>
+          </ThemedAccordion>
           <Divider />
         </div>
       ))}
@@ -121,7 +120,7 @@ export const InstructionsAccordion = () => {
   );
 };
 
-const ThemedAccordtion = styled((props: AccordionProps) => (
+const ThemedAccordion = styled((props: AccordionProps) => (
   <Accordion disableGutters elevation={0} square {...props} />
 ))(({ theme }) => ({
   borderBottom: `1px solid ${theme.palette.divider}`,

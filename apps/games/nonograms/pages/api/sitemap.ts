@@ -1,11 +1,10 @@
 import { NextApiHandler } from 'next';
-import { NONOGRAMS_URL } from '@worksheets/ui/env';
-
+import { SERVER_SETTINGS } from '@worksheets/data-access/server-settings';
 const LAST_UPDATE_DATE = `2023-12-10`;
 
 const addHomePage = () => {
   return `<url>
-        <loc>${NONOGRAMS_URL}</loc>
+        <loc>${SERVER_SETTINGS.WEBSITES.NONOGRAMS_URL()}</loc>
         <lastmod>${LAST_UPDATE_DATE}</lastmod>
         <priority>1.0</priority>
     </url>`;
