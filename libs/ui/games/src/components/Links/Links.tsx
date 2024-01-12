@@ -24,24 +24,10 @@ export const WaterOrgLink: FC<WebsiteLinkProps> = ({ sx }) => (
   </Link>
 );
 
-export const FullStoryLink = () => (
-  <Link href={urls.fullstory()} target="_blank" rel="noreferrer">
-    FullStory
-  </Link>
-);
-
 export const CharityGamesLink = () => (
   <Link href={urls.charityGames.home()}>Charity.Games</Link>
 );
 
-export const WorksheetsLink = () => (
-  <Link href={urls.worksheets()}>Worksheets.dev</Link>
-);
-
 export const ContactLink: FC<{ children: ReactNode }> = ({ children }) => (
   <Link href={urls.charityGames.contact()}>{children}</Link>
-);
-
-export const SubscribeLink: FC<{ children: ReactNode }> = ({ children }) => (
-  <Link href={urls.charityGames.newsletter()}>{children}</Link>
 );

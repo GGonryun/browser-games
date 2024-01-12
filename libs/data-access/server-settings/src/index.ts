@@ -4,25 +4,8 @@ export const SERVER_SETTINGS = {
   ENVIRONMENT: {
     IS_PRODUCTION: () => process.env['NODE_ENV'] === 'production',
     COOKIE_DOMAIN: () => process.env['NEXT_PUBLIC_COOKIE_DOMAIN'] ?? '',
-    PRODUCTION: 'production',
-    DEVELOPMENT: 'development',
-    VARIABLES: {
-      GCP: {
-        PROJECT_ID: () => process.env['GCP_PROJECT_ID'] ?? '',
-        PRIVATE_KEY_ID: () => process.env['GCP_PRIVATE_KEY_ID'] ?? '',
-        PRIVATE_KEY: () => process.env['GCP_PRIVATE_KEY'] ?? '',
-        CLIENT_EMAIL: () => process.env['GCP_CLIENT_EMAIL'] ?? '',
-        CLIENT_ID: () => process.env['GCP_CLIENT_ID'] ?? '',
-      },
-      FULLSTORY: {
-        API_KEY: () => process.env['FULLSTORY_API_KEY'] ?? '',
-      },
-    },
   },
   WEBSITES: {
-    // LEGIT SITES
-    WORKSHEETS_URL: (route = '') =>
-      process.env['NEXT_PUBLIC_WORKSHEETS_BASE_URL'] ?? '' + route,
     CHARITY_GAMES_URL: (route = '') =>
       process.env['NEXT_PUBLIC_CHARITY_GAMES_BASE_URL'] ?? '' + route,
     EMOJI_WAR_URL: (route = '') =>

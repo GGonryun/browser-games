@@ -24,7 +24,7 @@ export const TitleFooter: FC<TitleFooterProps> = ({
           <MenuButton
             border={border}
             color={color}
-            href={urls.charityGames.play()}
+            href={urls.charityGames.home()}
             target="_blank"
           >
             More Games

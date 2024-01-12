@@ -75,7 +75,7 @@ export const TitleContent: FC<TitleContentProps> = ({
                 color="text.secondary"
                 textAlign="center"
               >
-                <Link href={urls.charityGames.newsletter()}>Get notified</Link>{' '}
+                <Link href={urls.charityGames.contact()}>Get notified</Link>{' '}
                 when new puzzles are available.
               </Typography>
               <Typography variant="caption" color="text.secondary" pt={3}>

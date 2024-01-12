@@ -67,3 +67,4 @@ coverage/
 .docusaurus/
 .cache-loader/
 .vercel
+.nx

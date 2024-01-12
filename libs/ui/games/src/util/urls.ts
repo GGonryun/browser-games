@@ -31,18 +31,9 @@ export const urls = {
   freeRice: () => 'https://freerice.com/',
   waterOrg: () => 'https://www.water.org/',
   charityWater: () => 'https://www.charitywater.org/',
-  fullstory: () => 'https://www.fullstory.com/',
-  g2ss: () => 'https://www.g2ss.com/',
-  navwar: () => 'https://www.navwar.navy.mil/',
-  sdsu: () => 'https://www.sdsu.edu/',
-  usd: () => 'https://www.sandiego.edu/',
-  worksheets: () => SERVER_SETTINGS.WEBSITES.WORKSHEETS_URL(),
   charityGames: {
-    cookies: SERVER_SETTINGS.WEBSITES.CHARITY_GAMES_URL('/cookies'),
     home: () => SERVER_SETTINGS.WEBSITES.CHARITY_GAMES_URL(),
-    play: () => SERVER_SETTINGS.WEBSITES.CHARITY_GAMES_URL('/play'),
     contact: () => SERVER_SETTINGS.WEBSITES.CHARITY_GAMES_URL('/contact'),
-    newsletter: () => SERVER_SETTINGS.WEBSITES.CHARITY_GAMES_URL('/subscribe'),
   },
   games: {
     puzzleWords: () => SERVER_SETTINGS.WEBSITES.PUZZLE_WORDS_URL(),

@@ -3,28 +3,35 @@
   "npmScope": "worksheets",
   "tasksRunnerOptions": {
     "default": {
-      "runner": "nx/tasks-runners/default",
+      "runner": "nx-cloud",
       "options": {
-        "cacheableOperations": [
-          "build",
-          "lint",
-          "test",
-          "e2e",
-          "build-storybook"
-        ]
+        "cacheableOperations": [],
+        "accessToken": "NzlmNDFmMGUtMWMyMC00MmVkLThlMDUtNmU1NjRhODdmZGQxfHJlYWQtd3JpdGU="
       }
     }
   },
   "targetDefaults": {
     "build": {
-      "dependsOn": ["^build"],
-      "inputs": ["production", "^production"]
+      "dependsOn": [
+        "^build"
+      ],
+      "inputs": [
+        "production",
+        "^production"
+      ]
     },
     "test": {
-      "inputs": ["default", "^production", "{workspaceRoot}/jest.preset.js"]
+      "inputs": [
+        "default",
+        "^production",
+        "{workspaceRoot}/jest.preset.js"
+      ]
     },
     "e2e": {
-      "inputs": ["default", "^production"]
+      "inputs": [
+        "default",
+        "^production"
+      ]
     },
     "lint": {
       "inputs": [
@@ -34,11 +41,18 @@
       ]
     },
     "build-storybook": {
-      "inputs": ["default", "^production", "!{projectRoot}/.storybook/**/*"]
+      "inputs": [
+        "default",
+        "^production",
+        "!{projectRoot}/.storybook/**/*"
+      ]
     }
   },
   "namedInputs": {
-    "default": ["{projectRoot}/**/*", "sharedGlobals"],
+    "default": [
+      "{projectRoot}/**/*",
+      "sharedGlobals"
+    ],
     "production": [
       "default",
       "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)",
@@ -48,7 +62,9 @@
       "!{projectRoot}/**/*.stories.@(js|jsx|ts|tsx|mdx)",
       "!{projectRoot}/.storybook/**/*"
     ],
-    "sharedGlobals": ["{workspaceRoot}/babel.config.json"]
+    "sharedGlobals": [
+      "{workspaceRoot}/babel.config.json"
+    ]
   },
   "generators": {
     "@nx/react": {
@@ -73,5 +89,6 @@
         "linter": "eslint"
       }
     }
-  }
+  },
+  "defaultBase": "main"
 }
