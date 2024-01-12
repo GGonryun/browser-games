@@ -105,7 +105,7 @@ export const Letters: FC<{
                 }}
               >
                 <InnerBox size={slotSize} active={dragging}>
-                  {letters[i].toUpperCase()}
+                  {letters[i]}
                 </InnerBox>
               </motion.div>
             )}

@@ -38,7 +38,7 @@ export const TargetWord: FC<TargetWordProps> = ({ text, size, gap }) => {
           }}
         >
           <InnerBox size={size} active={true}>
-            {letter.toUpperCase()}
+            {letter}
           </InnerBox>
         </motion.div>
       ))}

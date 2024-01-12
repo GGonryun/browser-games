@@ -1,4 +1,4 @@
-import { lowerCaseAlphabet } from '@worksheets/ui-games';
+import { alphabet } from '@worksheets/ui-games';
 import {
   OrganizedByLength,
   dictionaryByLength,
@@ -42,7 +42,7 @@ export const generatePuzzle = (difficulty: Difficulty): GeneratedPuzzle => {
 
   const dictionary = dictionaryOption[difficulty];
   // pick a random word from the dictionary
-  const word = selectRandomItem(dictionary[size]);
+  const word = selectRandomItem(dictionary[size]).toUpperCase();
   // create a grid of the same size
   // fill the grid with random letters
   const empty = arrayFromLength(size);
@@ -57,7 +57,7 @@ export const generatePuzzle = (difficulty: Difficulty): GeneratedPuzzle => {
   // fill the grid with random letters
   for (let i = 0; i < extra; i++) {
     const row = Math.floor(Math.random() * size);
-    grid[row].push(selectRandomItem(lowerCaseAlphabet));
+    grid[row].push(selectRandomItem(alphabet));
   }
   // randomly insert the target word into the grid
   for (let i = 0; i < word.length; i++) {
