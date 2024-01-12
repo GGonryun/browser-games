@@ -1,0 +1,320 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+}
+
+model GamePlay {
+  id            String        @id @default(cuid())
+  total         Int
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  // reference to the game.
+  gameId        String
+  // game          Game          @relation(fields: [gameId], references: [id])
+  // anonymous users can play games.
+  userId        String?
+  user          User?         @relation(fields: [userId], references: [id])
+}
+
+model GameVote {
+  id            String        @id @default(cuid())
+  createdAt     DateTime      @default(now())
+  vote          Int           @default(1)
+
+  gameId        String
+  // game          Game          @relation(fields: [gameId], references: [id])
+
+  // only authenticated users can vote on games
+  userId        String
+  user          User         @relation(fields: [userId], references: [id])
+}
+
+enum GameDevices {
+  MOBILE
+  WEB
+}
+
+enum GameSubmissionStatus {
+  DRAFT
+  REJECTED
+  PENDING
+  ACCEPTED
+  DELETED
+}
+
+model User {
+  id                String    @id @default(cuid())
+  name              String?
+  email             String   @unique
+  emailVerified     DateTime?
+  image             String?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  
+  accounts          Account[]
+  sessions          Session[]
+  plays             GamePlay[]
+  votes             GameVote[]
+  profile           Profile?
+  purse             Purse?
+}
+
+model Account {
+  id                        String  @id @default(cuid())
+  userId                    String
+  type                      String
+  provider                  String
+  providerAccountId         String
+  refresh_token             String?  @db.Text
+  refresh_token_expires_in  Int?
+  access_token              String?  @db.Text
+  expires_at                Int?
+  token_type                String?
+  scope                     String?
+  id_token                  String?  @db.Text
+  session_state             String?
+  oauth_token_secret        String?
+  oauth_token               String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Email {
+  id            String    @default(cuid()) @id
+  address       String    @unique
+  verified      Boolean   @default(false)
+  createdAt     DateTime  @default(now()) @map(name: "created_at")
+  updatedAt     DateTime  @updatedAt @map(name: "updated_at")
+}
+
+model Profile {
+  id                String    @id @default(cuid())
+  // basic settings
+  username          String    @unique
+  bio               String?
+  // publisher settings
+  isPublisher       Boolean   @default(false)
+  // audit
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  // profiles may exist without a user.
+  // this lets us upload games on behalf of users (legacy).
+  userId            String?    @unique
+  user              User?      @relation(fields: [userId], references: [id])
+  // external references
+  games             Game[]
+  submissions       GameSubmission[]
+}
+
+model Purse {
+  id                String    @id @default(cuid())
+  userId            String    @unique
+  user              User      @relation(fields: [userId], references: [id])
+  balance           Int       @default(0)
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+}
+
+
+enum ReportReason {
+  BROKEN
+  DEFAMATORY
+  HARMFUL
+  LEGAL
+  FRAUD
+  INAPPROPRIATE
+  OTHER
+}
+
+model GameReport {
+  id            String        @id @default(cuid())
+  gameId        String
+  reason        ReportReason  @default(OTHER)
+  text          String        @db.VarChar(255)
+  createdAt     DateTime      @default(now())
+}
+
+enum ProjectType {
+  HTML
+  PAGE  
+}
+
+enum ViewportType {
+  FIXED
+  RESPONSIVE
+}
+
+enum GameCategory {
+  ACTION
+  ADVENTURE
+  ARCADE
+  BOARD
+  CARD
+  EDUCATIONAL
+  FIGHTING
+  IDLE
+  NOVEL
+  PLATFORMER
+  PUZZLE
+  RACING
+  RPG
+  RHYTHM
+  SHOOTER
+  SIMULATION
+  SPORTS
+  STRATEGY
+  SURVIVAL
+  OTHER
+  TRIVIA
+  WORD
+}
+
+enum DeviceOrientations {
+  PORTRAIT
+  LANDSCAPE
+}
+
+model Viewport {
+  id            String                @id @default(cuid())
+  type          ViewportType          @default(RESPONSIVE)
+  width         Int?
+  height        Int?
+  devices       GameDevices[]         @default([WEB])
+  orientations  DeviceOrientations[]  @default([PORTRAIT])
+  games         Game[]
+}
+
+model GameFile {
+  id           String                @id @default(cuid())
+  type         ProjectType           @default(HTML)
+  url          String                @db.VarChar(511)
+  game         Game?    
+}
+
+model Game {
+  id            String          @id @default(cuid())
+  slug          String          @db.VarChar(63)
+  // Details
+  title         String          @db.VarChar(127)
+  headline      String          @db.VarChar(256)
+  description   String          @db.VarChar(2047)
+  instructions  String          @db.VarChar(2047)
+  // a JSON object with the game's supported markets
+  // we use a string instead of JSON because our zod parser doesn't support JSON properly.
+  // known-issue: https://github.com/microsoft/TypeScript/issues/34933
+  markets       String?
+  // Search
+  category      GameCategory    @default(OTHER)
+  tags          String[]        @db.VarChar(63)
+  // Assets
+  thumbnail     String          @db.Text // URL
+  cover         String          @db.Text // URL
+  screenshots   String[]        @db.Text // URLs
+  trailer       String?         @db.Text // URL
+  // Audit
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  // Game File
+  fileId        String          @unique
+  file          GameFile        @relation(fields: [fileId], references: [id])
+  viewportId    String
+  viewport      Viewport        @relation(fields: [viewportId], references: [id])
+  // Ownership
+  ownerId       String?
+  owner         Profile?        @relation(fields: [ownerId], references: [id])
+  // Analytics
+  // votes         GameVote[]
+  // plays         GamePlay[]
+}
+
+model StoredFile {
+  id            String           @id @default(cuid())
+  submissionId  String
+  userId        String
+  name          String           @db.VarChar(255)
+  path          String           @db.VarChar(511)
+  size          Int              @default(0) // stored as MB
+  type          String           @db.VarChar(63)
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+  
+  gameFileFor   GameSubmission?   @relation(name: "gameFile")
+  thumbnailFor  GameSubmission?   @relation(name: "thumbnailFile")
+  coverFor      GameSubmission?   @relation(name: "coverFile")
+}
+
+model GameSubmission {
+  id                  String                    @id @default(cuid())
+  // form data
+  slug                String?                   @db.VarChar(63)
+  title               String?                   @db.VarChar(63)
+  headline            String?                   @db.VarChar(255)
+  projectType         ProjectType?             
+  externalWebsiteUrl  String?                   @db.VarChar(255)
+  viewport            ViewportType?             @default(RESPONSIVE)
+  viewportWidth       Int? 
+  viewportHeight      Int?
+  devices             GameDevices[]             
+  orientations        DeviceOrientations[]      
+  description         String?                   @db.VarChar(1023)
+  instructions        String?                   @db.VarChar(1023)
+  category            GameCategory?             
+  tags                String[]                  @db.VarChar(63) @default([])
+  // a JSON object with the game's supported markets
+  // we use a string instead of JSON because our zod parser doesn't support JSON properly.
+  // known-issue: https://github.com/microsoft/TypeScript/issues/34933
+  markets             String?
+  // assets
+  // cascade delete the files when the submission is deleted.
+  gameFileId          String?                   @db.VarChar(63) @unique 
+  gameFile            StoredFile?               @relation(name: "gameFile", fields: [gameFileId], references: [id]) 
+  thumbnailFileId     String?                   @db.VarChar(63) @unique
+  thumbnailFile       StoredFile?               @relation(name: "thumbnailFile", fields: [thumbnailFileId], references: [id])
+  coverFileId         String?                   @db.VarChar(63) @unique
+  coverFile           StoredFile?               @relation(name: "coverFile", fields: [coverFileId], references: [id])
+  trailerUrl          String?                   @db.VarChar(63)
+  // The game status is updated when the game is submitted.
+  // approved submissions are deleted after the game is published.
+  status              GameSubmissionStatus      @default(DRAFT)
+  reviews             GameSubmissionFeedback[]
+  // the profile that submitted the game
+  profileId             String 
+  profile               Profile                 @relation(fields: [profileId], references: [id])    
+  // auditing and analytics
+  createdAt           DateTime                  @default(now())
+  updatedAt           DateTime                  @updatedAt
+}
+
+// Feedback for a game submission, written by an admin or moderator.
+// Feedback should be created if a game has some issues that need to be fixed before it can be published.
+// A game submission can have multiple feedback reports.
+model GameSubmissionFeedback {
+  id            String          @id @default(cuid())
+  submissionId        String        
+  text          String          @db.VarChar(511)
+  createdAt     DateTime        @default(now())
+  game          GameSubmission  @relation(fields: [submissionId], references: [id])
+}
